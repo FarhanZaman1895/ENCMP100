@@ -2,9 +2,11 @@
 # Electrical and Computer Engineering
 # All rights reserved.
 #
-# Student name:
-# Student CCID:
-# Others:
+# Student name: Farhan Zaman
+# Student CCID: fzaman2
+# Others: 
+# Jason Wang (1%)
+# Farhan Zaman (99%)
 #
 # To avoid plagiarism, list the names of persons, Version 0 author(s)
 # excluded, whose code, words, ideas, or data you used. To avoid
@@ -21,17 +23,21 @@
 #
 import numpy as np
 
-print('Version 1')
+print('Lab 2 - Version 1')
 code = input('Please enter a code to break: ')
 code = np.array(list(code),dtype=int)
 
 # Rule 1, test if the length of the number is 9
 if len(code) == 9:
+
     # Rule 2, test if the sum is even
     if code.sum()%2 == 1:
+
         # Rule 3
         day = (code[2] * code[1]) - code[0]
-        print("Day = %d" % day)
+        validDayRange = np.arange(1, 8)
+        if day in validDayRange:
+            print("Day = %d" % day)
 
         # Rule 4
         placeCalc = code[2] ** code[1]
@@ -44,6 +50,3 @@ if len(code) == 9:
         print("Decoy message: Sum is even")
 else:
     print("Decoy message: Not a nine-digit number")
-
-
-print("The code entered is %s" % code)
