@@ -22,7 +22,28 @@
 import numpy as np
 
 print('Version 1')
-# ----------Students write/modify their code below here ---------------------
 code = input('Please enter a code to break: ')
 code = np.array(list(code),dtype=int)
+
+# Rule 1, test if the length of the number is 9
+if len(code) == 9:
+    # Rule 2, test if the sum is even
+    if code.sum()%2 == 1:
+        # Rule 3
+        day = (code[2] * code[1]) - code[0]
+        print("Day = %d" % day)
+
+        # Rule 4
+        placeCalc = code[2] ** code[1]
+        if placeCalc%3 == 0:
+            place = code[5] - code[4]
+        else:
+            place = code[4] - code[5] 
+        print("Place = %d" % place)
+    else:
+        print("Decoy message: Sum is even")
+else:
+    print("Decoy message: Not a nine-digit number")
+
+
 print("The code entered is %s" % code)
