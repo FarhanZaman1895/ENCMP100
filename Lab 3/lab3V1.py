@@ -2,9 +2,11 @@
 # Electrical and Computer Engineering
 # All rights reserved.
 #
-# Student name:
-# Student CCID:
-# Others:
+# Student name: Farhan Zaman
+# Student CCID: 1803211
+# Others: Jason Wang (2%) Assisted with removing margins from graph
+# Farhan Zaman (98%)
+# Matplotlib documentation was used to change the increments of the x axis
 #
 # To avoid plagiarism, list the names of persons, Version 0 author(s)
 # excluded, whose code, words, ideas, or data you used. To avoid
@@ -38,9 +40,12 @@ engTuit = [6550]
 monthlyAmount = [START_AMOUNT]
 
 ## CALCULATION
+
+# Saving Calculation
 for i in range(1, NUMBER_OF_MONTHS):
     monthlyAmount += [monthlyAmount[i - 1] + (monthlyAmount[i - 1] * (MONTHLY_INTEREST / 12)) + MONTHLY_CONTRIBUTION]
 
+# Tuition Calculation
 for i in range(1, 22):
     artTuit += [ artTuit[i-1] * (1 + TUITION_INTEREST) ]
     sciTuit += [ sciTuit[i-1] * (1 + TUITION_INTEREST) ]
@@ -74,5 +79,7 @@ ax.hlines(totalEngTuit, 0, NUMBER_OF_MONTHS, color = "red", label = "Engineering
 ax.set(xticks = range(0, NUMBER_OF_MONTHS + 1, 12), xticklabels = xTickLabels)
 ax.axis([0, NUMBER_OF_MONTHS + 1, 0, 100000])
 ax.legend()
-ax.margins(x=0, y=0)
+plt.title("Savings vs Tuition")
+plt.ylabel("Amount $")
+plt.xlabel("Years")
 plt.show()
