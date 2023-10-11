@@ -26,7 +26,6 @@ import numpy as np
 
 ## CONSTANTS
 NUMBER_OF_MONTHS = 12 * 18
-MONTHLY_CONTRIBUTION = 200
 START_AMOUNT = 2000
 MONTHLY_INTEREST = 0.0625
 TUITION_INTEREST = 0.07
@@ -36,6 +35,9 @@ artTuit = [5550]
 sciTuit = [6150]
 engTuit = [6550]
 
+# Variable Monthly Contribution
+monthlyContribution = 200
+
 # Initialize y axis for graph
 monthlyAmount = [START_AMOUNT]
 
@@ -43,7 +45,7 @@ monthlyAmount = [START_AMOUNT]
 
 # Saving Calculation
 for i in range(1, NUMBER_OF_MONTHS):
-    monthlyAmount += [monthlyAmount[i - 1] + (monthlyAmount[i - 1] * (MONTHLY_INTEREST / 12)) + MONTHLY_CONTRIBUTION]
+    monthlyAmount += [monthlyAmount[i - 1] + (monthlyAmount[i - 1] * (MONTHLY_INTEREST / 12)) + monthlyContribution]
 
 # Tuition Calculation
 for i in range(1, 22):
