@@ -21,108 +21,168 @@
 # followed by percentages as above. Email a link to or a copy of the
 # source to the lab instructor before the assignment is due.
 #
+
+## PREPROCESSING
+
+# Imports
 import matplotlib.pyplot as plt
 import numpy as np
 
-## CONSTANTS
+# Constants
 NUMBER_OF_MONTHS = 12 * 18
 START_AMOUNT = 2000
 MONTHLY_CONTRIBUTION = 200
 MONTHLY_INTEREST = 0.0625
 TUITION_INTEREST = 0.07
 
-# Arrays for tuition interest
-artTuit = [5550]
-sciTuit = [6150]
-engTuit = [6550]
-
-# Variable Monthly Contribution
+# Variables
+artTuition = [5550]
+sciTuition = [6150]
+engTuition = [6550]
 
 # Initialize y axis for graph
 monthlyAmount = [START_AMOUNT]
 
-## CALCULATION
+## SAVING cALCULATION
 
-# Saving Calculation
+# This section cycles through all the months in 18 years and calculates the amount in the account
+# accounting for both monthly interest and a static monthly contribution
+
 for i in range(1, NUMBER_OF_MONTHS):
+    # Calculates the amount for each month using the given formula
     monthlyAmount += [monthlyAmount[i - 1] + (monthlyAmount[i - 1] * (MONTHLY_INTEREST / 12)) + MONTHLY_CONTRIBUTION]
 
-# Tuition Calculation
+## TUITION CALCULATION
+
+# This section calculates the monthly tution accounting for interst using a for loop to cycle through
+# tution amount for each year for 22 years
+
 for i in range(1, 22):
-    artTuit += [ artTuit[i-1] * (1 + TUITION_INTEREST) ]
-    sciTuit += [ sciTuit[i-1] * (1 + TUITION_INTEREST) ]
-    engTuit += [ engTuit[i-1] * (1 + TUITION_INTEREST) ]
+    artTuition += [ artTuition[i-1] * (1 + TUITION_INTEREST) ]
+    sciTuition += [ sciTuition[i-1] * (1 + TUITION_INTEREST) ]
+    engTuition += [ engTuition[i-1] * (1 + TUITION_INTEREST) ]
 
-totalArtTuit = 0
-totalSciTuit = 0
-totalEngTuit = 0
+# These variables are initialized to calculate the sum of the last 4 years using the array created above
+totalArtTuition = 0
+totalSciTuition = 0
+totalEngTuition = 0
 
+# This for loop goes through the last 4 elements of the array and sums them together to get the final tution
+# cost for four years after turning 18
 for i in range(0, 4):
-    totalArtTuit += artTuit[-(i + 1)]
-    totalSciTuit += sciTuit[-(i + 1)]
-    totalEngTuit += engTuit[-(i + 1)]
+    totalArtTuition += artTuition[-(i + 1)]
+    totalSciTuition += sciTuition[-(i + 1)]
+    totalEngTuition += engTuition[-(i + 1)]
 
-## SAVINGS/TUITION CALCULATION
+# Print outputs for version 1
 print("Version 1 - Solution")
-print(f"The savings ammount is {format(monthlyAmount[-1], '.2f')}")
-print(f"The cost of the arts program is ${format(totalArtTuit, '.2f')}")
-print(f"The cost of the science program is ${format(totalSciTuit, '.2f')}")
-print(f"The cost of the engineering program is ${format(totalEngTuit, '.2f')}")
+print(f"The savings amount is ${format(monthlyAmount[-1], '.2f')}")
+print(f"The cost of the arts program is ${format(totalArtTuition, '.2f')}")
+print(f"The cost of the science program is ${format(totalSciTuition, '.2f')}")
+print(f"The cost of the engineering program is ${format(totalEngTuition, '.2f')}")
 print("")
 
-## SAVINGS OPTIMIZATION
+## OPTIMIZATION
+
+# This secion first prompts the user for which program they would like savings optimization for and then
+# simulates the final savings amount value for 216 months, going up in increments of 1, until the savings
+# amount is sufficient to pay for the tuition for the selected program
+
 print("Version 2 - Solution")
+
+# Prompt user for program
 desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
 
+# This while loop ensures that the input is valid using a try except statement
+# If the input is not valid, as in not an int and not between 1 and 3, the program will prompt for the 
+# user to input a valid number
 condition = True
 while condition:
-    try:
+    try: # Tries to convert the input to int
         desiredProgram = int(desiredProgram)
-    except:
-        print("Please enter a number from 1 to 3: ")
+    except: # If it fails, prompt again for an input
+        print("Please enter an integer value")
+        desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
     else:
         if desiredProgram in range(1, 4):
+            # If the number is in the valid range, it breaks the loop
             condition = False
+        else:
+            # Prompts the user for a valid option
+            print("Please enter a valid option.")
+            desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
 
+# Setup for the following while loop
 condition = True
-incrementCount = 1
+optimizeMonthlyContribution = 0
 
+# Assigns the required amount to the selected program tuition, as well as the program name for the final
+# print outputs
 if desiredProgram == 1:
-    requiredAmmount = totalArtTuit
+    requiredAmount = totalArtTuition
+    programName = "arts"
 elif desiredProgram == 2:
-    requiredAmmount = totalSciTuit
+    requiredAmount = totalSciTuition
+    programName = "science"
 else:
-    requiredAmmount = totalEngTuit
+    requiredAmount = totalEngTuition
+    programName = "engineering"
 
+# This while loop calculates the savings amount for 1 monthly contribution, and then adds 1 to 
+# the monthly contribution until the final savings amount exceeds the required amount for the 
+# program tuition.
 while condition:
-    incrementCount += 1
-    optimizeArr = [2000]
+    optimizeMonthlyContribution += 1 # Adds 1 to the monthly contribution
+    optimizeArray = [2000] # Resets the array for calculating monthly savings amount
+
+    # Simulates the savings amount for the given monthly contribution amount
     for i in range(1, NUMBER_OF_MONTHS):
-        optimizeArr += [optimizeArr[i - 1] + (optimizeArr[i - 1] * (MONTHLY_INTEREST / 12)) + incrementCount]
-    if optimizeArr[-1] >= requiredAmmount:
+        optimizeArray += [optimizeArray[i - 1] + (optimizeArray[i - 1] * (MONTHLY_INTEREST / 12)) + optimizeMonthlyContribution]
+    if optimizeArray[-1] >= requiredAmount:
         condition = False
 
-if desiredProgram == 1:
-    print("Congratulation!!! You have saved enough for the arts program")
-elif desiredProgram == 2:
-    print("Unfortunately!!! You do not have enough saved for the science program")
+# Tests if the monthly contribution required for the desired program is less than or equal to the 
+# monthly contribution actually given of 200
+if optimizeMonthlyContribution <= MONTHLY_CONTRIBUTION:
+    print(f"Congratulation!!! You have saved enough for the {programName} program")
 else:
-    print("Unfortunately!!! You do not have enough saved for the engineering program")
+    print(f"Unfortunately!!! You do not have enough saved for the {programName} program")
 
-print(f"The optimal monthly contribution amount is ${incrementCount}")
+# Prints the optimal monthly contribution for the desired program
+print(f"The optimal monthly contribution amount is ${optimizeMonthlyContribution}")
+
+## PLOT
+
+# This section creates a graph with 4 plots, one for the monthly savings amount with a contribution of $200 a month,
+# and three horizontal lines for the prices of the four years of university after 18 years
+
 # Make the labels for the ticks along x axis
+# The np.char.mod function takes an array of any type and converts it into an array of strings
+# I used this to create the labels for the x axis
 xTickLabels = np.char.mod("%d", np.arange(0, 19))
 
 # Plot Graph
-fig, ax = plt.subplots()
+fig, ax = plt.subplots() # This is a matplotlib object that is used to make the graph
+
+# Plots the 4 graphs
 ax.plot(range(0, NUMBER_OF_MONTHS), monthlyAmount, label = "Saving Balance")
-ax.hlines(totalArtTuit, 0, NUMBER_OF_MONTHS, color = "orange", label = "Arts")
-ax.hlines(totalSciTuit, 0, NUMBER_OF_MONTHS, color = "green", label = "Science")
-ax.hlines(totalEngTuit, 0, NUMBER_OF_MONTHS, color = "red", label = "Engineering")
+ax.hlines(totalArtTuition, 0, NUMBER_OF_MONTHS, color = "orange", label = "Arts")
+ax.hlines(totalSciTuition, 0, NUMBER_OF_MONTHS, color = "green", label = "Science")
+ax.hlines(totalEngTuition, 0, NUMBER_OF_MONTHS, color = "red", label = "Engineering")
+
+# This sets the x axis to show the years instead of months
 ax.set(xticks = range(0, NUMBER_OF_MONTHS + 1, 12), xticklabels = xTickLabels)
+
+# This removes the margins around the graph
 ax.axis([0, NUMBER_OF_MONTHS + 1, 0, 100000])
-ax.legend()
+
+# The legend placed in the lower right
+ax.legend(loc = "lower right")
+
+# Title and Axes
 plt.title("Savings vs Tuition")
 plt.ylabel("Amount $")
 plt.xlabel("Years")
+
+# Show the plot
 plt.show()
