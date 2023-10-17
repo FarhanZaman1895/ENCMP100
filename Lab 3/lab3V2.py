@@ -43,7 +43,7 @@ engTuition = [6550]
 # Initialize y axis for graph
 monthlyAmount = [START_AMOUNT]
 
-## SAVING cALCULATION
+## SAVING CALCULATION
 
 # This section cycles through all the months in 18 years and calculates the amount in the account
 # accounting for both monthly interest and a static monthly contribution
@@ -90,27 +90,23 @@ print("")
 
 print("Version 2 - Solution")
 
-# Prompt user for program
-desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
 
 # This while loop ensures that the input is valid using a try except statement
 # If the input is not valid, as in not an int and not between 1 and 3, the program will prompt for the 
 # user to input a valid number
+desiredProgram = 0
 condition = True
 while condition:
-    try: # Tries to convert the input to int
+    desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
+    try:
         desiredProgram = int(desiredProgram)
-    except: # If it fails, prompt again for an input
-        print("Please enter an integer value")
-        desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
-    else:
+
         if desiredProgram in range(1, 4):
-            # If the number is in the valid range, it breaks the loop
             condition = False
         else:
-            # Prompts the user for a valid option
             print("Please enter a valid option.")
-            desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
+    except:
+        print("Please enter an integer.")
 
 # Setup for the following while loop
 condition = True
@@ -128,27 +124,22 @@ else:
     requiredAmount = totalEngTuition
     programName = "engineering"
 
-# This while loop calculates the savings amount for 1 monthly contribution, and then adds 1 to 
-# the monthly contribution until the final savings amount exceeds the required amount for the 
-# program tuition.
+# Simulate the savings amount until it reaches the required amount
 while condition:
-    optimizeMonthlyContribution += 1 # Adds 1 to the monthly contribution
-    optimizeArray = [2000] # Resets the array for calculating monthly savings amount
+    optimizeMonthlyContribution += 1
+    optimizeArray = [2000]
 
-    # Simulates the savings amount for the given monthly contribution amount
     for i in range(1, NUMBER_OF_MONTHS):
         optimizeArray += [optimizeArray[i - 1] + (optimizeArray[i - 1] * (MONTHLY_INTEREST / 12)) + optimizeMonthlyContribution]
     if optimizeArray[-1] >= requiredAmount:
         condition = False
 
-# Tests if the monthly contribution required for the desired program is less than or equal to the 
-# monthly contribution actually given of 200
+# Outputs
 if optimizeMonthlyContribution <= MONTHLY_CONTRIBUTION:
     print(f"Congratulation!!! You have saved enough for the {programName} program")
 else:
     print(f"Unfortunately!!! You do not have enough saved for the {programName} program")
 
-# Prints the optimal monthly contribution for the desired program
 print(f"The optimal monthly contribution amount is ${optimizeMonthlyContribution}")
 
 ## PLOT
@@ -156,33 +147,23 @@ print(f"The optimal monthly contribution amount is ${optimizeMonthlyContribution
 # This section creates a graph with 4 plots, one for the monthly savings amount with a contribution of $200 a month,
 # and three horizontal lines for the prices of the four years of university after 18 years
 
-# Make the labels for the ticks along x axis
-# The np.char.mod function takes an array of any type and converts it into an array of strings
-# I used this to create the labels for the x axis
+# Creates an array of strings with the numbers 0 to 18, obtained from numpy documentation
 xTickLabels = np.char.mod("%d", np.arange(0, 19))
 
 # Plot Graph
 fig, ax = plt.subplots() # This is a matplotlib object that is used to make the graph
-
-# Plots the 4 graphs
 ax.plot(range(0, NUMBER_OF_MONTHS), monthlyAmount, label = "Saving Balance")
+
+# hlines plots a horizontal line
 ax.hlines(totalArtTuition, 0, NUMBER_OF_MONTHS, color = "orange", label = "Arts")
 ax.hlines(totalSciTuition, 0, NUMBER_OF_MONTHS, color = "green", label = "Science")
 ax.hlines(totalEngTuition, 0, NUMBER_OF_MONTHS, color = "red", label = "Engineering")
 
-# This sets the x axis to show the years instead of months
+# Graph visuals
 ax.set(xticks = range(0, NUMBER_OF_MONTHS + 1, 12), xticklabels = xTickLabels)
-
-# This removes the margins around the graph
 ax.axis([0, NUMBER_OF_MONTHS + 1, 0, 100000])
-
-# The legend placed in the lower right
 ax.legend(loc = "lower right")
-
-# Title and Axes
 plt.title("Savings vs Tuition")
 plt.ylabel("Amount $")
 plt.xlabel("Years")
-
-# Show the plot
 plt.show()
