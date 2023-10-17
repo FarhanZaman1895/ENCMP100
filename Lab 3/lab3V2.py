@@ -90,7 +90,6 @@ print("")
 
 print("Version 2 - Solution")
 
-
 # This while loop ensures that the input is valid using a try except statement
 # If the input is not valid, as in not an int and not between 1 and 3, the program will prompt for the 
 # user to input a valid number
@@ -108,10 +107,6 @@ while condition:
     except:
         print("Please enter an integer.")
 
-# Setup for the following while loop
-condition = True
-optimizeMonthlyContribution = 0
-
 # Assigns the required amount to the selected program tuition, as well as the program name for the final
 # print outputs
 if desiredProgram == 1:
@@ -124,9 +119,13 @@ else:
     requiredAmount = totalEngTuition
     programName = "engineering"
 
+# Setup for the following while loop
+condition = True
+optimizeMonthlyContribution = 0
+
 # Simulate the savings amount until it reaches the required amount
 while condition:
-    optimizeMonthlyContribution += 1
+    optimizeMonthlyContribution += 1 # this increases the contribution amount
     optimizeArray = [2000]
 
     for i in range(1, NUMBER_OF_MONTHS):
