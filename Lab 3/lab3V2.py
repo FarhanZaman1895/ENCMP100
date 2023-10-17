@@ -97,7 +97,7 @@ desiredProgram = 0
 condition = True
 while condition:
     desiredProgram = input("Enter a program 1.Arts, 2.Science, 3. Engineering :")
-    try:
+    try: # checks if input can be turned into an int
         desiredProgram = int(desiredProgram)
 
         if desiredProgram in range(1, 4):
@@ -123,11 +123,12 @@ else:
 condition = True
 optimizeMonthlyContribution = 0
 
-# Simulate the savings amount until it reaches the required amount
+# Calculate optimal contribution
 while condition:
     optimizeMonthlyContribution += 1 # this increases the contribution amount
     optimizeArray = [2000]
 
+    # simulates savings over 18 years
     for i in range(1, NUMBER_OF_MONTHS):
         optimizeArray += [optimizeArray[i - 1] + (optimizeArray[i - 1] * (MONTHLY_INTEREST / 12)) + optimizeMonthlyContribution]
     if optimizeArray[-1] >= requiredAmount:
