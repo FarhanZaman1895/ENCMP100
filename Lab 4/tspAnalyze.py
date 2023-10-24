@@ -84,12 +84,25 @@ def tspPlot(tsp):
     tsp1 = tsp[num]
 
     if edge == 'EUC_2D':
-        print("Valid (%s)!!!" % edge)
+        plotEuc2D(tsp1[10], tsp1[2], tsp1[0])
     else:
         print("Invalid (%s)!!!" % edge)
 
 def plotEuc2D(coord, comment, name):
-    pass
+    xPlot = np.empty(len(coord))
+    yPlot = np.empty(len(coord))
+
+    for i in range(len(coord)):
+        xPlot[i] = coord[i][0]
+        yPlot[i] = coord[i][1]
+
+    plt.plot(xPlot, yPlot, "bo", linestyle = "solid", markersize = 3, label = name)
+    plt.plot([xPlot[0], xPlot[-1]], [yPlot[0], yPlot[-1]], "r", linestyle = "solid", markersize = 0)
+    plt.xlabel("x-Coordinate")
+    plt.ylabel("y-Coordinate")
+    plt.title(comment)
+    plt.legend()
+    plt.savefig("tspPlot.png")
 
 # Run the main function
 main()
