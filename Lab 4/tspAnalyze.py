@@ -17,6 +17,8 @@
 # Student CCID: 1803211
 # Others:
 #
+# Matplotlib documentation was referenced for the plt.clf()
+#
 # To avoid plagiarism, list the names of persons, Version 0 author(s)
 # excluded, whose code, words, ideas, or data you used. To avoid
 # cheating, list the names of persons, excluding the ENCMP 100 lab
@@ -103,6 +105,9 @@ def plotEuc2D(coord, comment, name):
     plt.title(comment)
     plt.legend()
     plt.savefig("tspPlot.png")
+    plt.clf()
+
+    # Function to clear the previous plot data
     plt.clf()
 
 # Run the main function
