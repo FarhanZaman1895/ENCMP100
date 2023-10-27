@@ -105,7 +105,6 @@ def plotEuc2D(coord, comment, name):
     plt.title(comment)
     plt.legend()
     plt.savefig("tspPlot.png")
-    plt.clf()
 
     # Function to clear the previous plot data
     plt.clf()
