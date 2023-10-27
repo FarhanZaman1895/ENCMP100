@@ -103,6 +103,7 @@ def plotEuc2D(coord, comment, name):
     plt.title(comment)
     plt.legend()
     plt.savefig("tspPlot.png")
+    plt.clf()
 
 # Run the main function
 main()
