@@ -37,7 +37,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def main():
+def mine():
     # Main function, main entry point for code
 
     # Reads the required files for data and text
@@ -72,15 +72,16 @@ def menu() -> int:
     print("2. Limit dimension")
     print("3. Plot one tour")
     print()
+
     choice = int(input("Choice (0-3)? "))
     while not (0 <= choice <= 3):
         choice = int(input("Choice (0-3)? "))
 
+
     return choice
 
-def tspPrint(tsp: list):
+def tspPrint(tsp):
 
-    # 
     # Arguments: tsp: multi dimensional list
     # Returns: N/A
     # Side Effects: Prints all tspData in table
@@ -95,11 +96,17 @@ def tspPrint(tsp: list):
         print("%3d  %-9.9s  %-9.9s  %9d  %s"
               % (k,name,edge,dimension,comment))
 
+def tspLimit(tsp):
+
+    print("Min dimension: ")
+    print("Max dimension: ")
+    print("Limit value? ")
+
 def tspPlot(tsp):
 
-    # This function prompts the user for another input for which dataset they
-    # would like to plot into a graph and save as a file. It then calls another
-    # function which plots the graph based on user input.
+    # Arguments: tsp: multi dimensional list
+    # Returns: N/A
+    # Side Effects: Prompts user for which trip, calls another function to plot
 
     num = int(input("Number (EUC_2D)? "))
     edge = tsp[num][5]
@@ -113,9 +120,11 @@ def tspPlot(tsp):
 
 def plotEuc2D(coord, comment, name):
 
-    # This function plots a graph based on coordinate arrays, and
-    # also puts a comment argument in the title of the graph, and a name
-    # in the legend.
+    # Arguments: 2d list of coordinates, string for comment and name
+    # Returns: N/A
+    # Side Effects: Creates a plot and saves in the file tspPlot.png
+    # Note: Does not show the plot because of a bug with mathplotlib that
+    # saves a blank image if shown and exported
 
     # Creates empty arrays for x and y based on the length of the coordinate array
     xPlot = np.empty(len(coord))
