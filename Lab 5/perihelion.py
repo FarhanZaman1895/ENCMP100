@@ -35,13 +35,16 @@ import matplotlib.pyplot as plt
 def main():
     data = loaddata('horizons_results')
     data = locate(data) # Perihelia
-    data = select(data,25,('Jan','Feb','Mar'))
-    makeplot(data,'horizons_results')
+    data = select(data, 25, ('Jan','Feb','Mar'))
+    makeplot(data, 'horizons_results')
 
-def loaddata(filename):
-    file = open(filename+'.txt','r')
+def loaddata(filename: str) -> list:
+    # File Read
+    file = open(filename + '.txt', 'r')
     lines = file.readlines()
     file.close()
+
+    # Creates data array
     noSOE = True
     num = 0
     data = []
@@ -53,7 +56,7 @@ def loaddata(filename):
             num = num+1
             if num % 10000 == 0:
                 print(filename,":",num,"line(s)")
-            datum = num2dict(num)
+            datum = str2dict(line)
             data.append(datum)
         else:
             break # for
@@ -61,18 +64,19 @@ def loaddata(filename):
         print(filename,": no $$SOE line")
     else:
         print(filename,":",num,"line(s)")
+
     return data
 
-def num2dict(numdate):
-    strdate = "Day "+str(numdate)
-    yaph = 6.98169e7 # Aphelion (km)
-    yprh = 4.60012e7 # Perihelion (km)
-    days = 87.9691 # Orbit period (d)
-    sine = (np.cos(2*np.pi*numdate/days)+1)/2
-    return {'numdate':numdate,'strdate':strdate,
-            'coord':(0,yprh+(yaph-yprh)*sine,0)}
+def str2dict(line: str) -> dict:
+    lineArray = line.split(",")
 
-def locate(data1):
+    numdate = float(lineArray[0])
+    strdate = lineArray[1].split(" ")[2]
+    coord = (float(lineArray[2]), float(lineArray[3]), float(lineArray[4]))
+
+    return { 'numdate': numdate, 'strdate': strdate, 'coord': coord }
+
+def locate(data1: list) -> list:
     dist = [] # Vector lengths
     for datum in data1:
         coord = np.array(datum['coord'])
@@ -84,16 +88,22 @@ def locate(data1):
             data2.append(data1[k])
     return data2
 
-def select(data,ystep,month):
-    if len(data) > 10:
-        data = data[0:10]
-    return data
+def select(data: list, ystep: int, month: tuple) -> list:
+    # Filters data to multiples of ystep year and to a month 
+    newData = []
+    for datum in data:
+        datumArray = datum['strdate'].split("-")
+        if int(datumArray[0]) % ystep == 0 and datumArray[1] in month:
+            newData.append(datum)
+    return newData
 
-def makeplot(data,filename):
+def makeplot(data: list, filename: str):
     (numdate,strdate,arcsec) = precess(data)
     plt.plot(numdate,arcsec,'bo')
     plt.xticks(numdate,strdate,rotation=45)
     add2plot(numdate,arcsec)
+    plt.xlabel("Perihelion date")
+    plt.ylabel("Precession (arcsec)")
     plt.savefig(filename+'.png',bbox_inches='tight')
     plt.show()
 
@@ -118,6 +128,6 @@ def add2plot(numdate,actual):
     for k in range(len(numdate)):
         bestfit.append(r[0]*numdate[k]+r[1])
     plt.plot(numdate,bestfit,'b-')
-    plt.legend(["Actual data","Best fit line"])
+    plt.legend(["Actual data","Best fit line"], "upper left")
 
 main()
