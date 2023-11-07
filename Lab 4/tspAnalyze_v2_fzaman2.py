@@ -37,7 +37,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def mine():
+def main():
+
     # Main function, main entry point for code
 
     # Reads the required files for data and text
@@ -52,18 +53,41 @@ def mine():
     while choice != 0:
         if choice == 1:
             tspPrint(tsp)
-
+        elif choice == 2:
+            tsp = tspLimit(tsp)
         elif choice == 3:
             tspPlot(tsp)
 
         choice = menu()
+
+def inputCheck(prompt, minValue, maxValue):
+
+    # Checks if the user input is an int and within the given bounds
+    # Arguments: prompt text, minimum and maximum values
+    # Returns: integer choice value
+    # Side Effects: prompts user input
+
+    condition = True
+    choice = -1
+    while condition:
+        try:
+            # Ensures choice is an int
+            choice = int(input(prompt))
+
+            if choice >= minValue and choice <= maxValue:
+                    condition = False
+        except:
+            # Does nothing if errors
+            pass
+
+    return choice
 
 def menu() -> int:
     
     # Prints menu and gets user input
     # Arguments: N/A
     # Returns: choice: int
-    # Side effects: prints a menu
+    # Side Effects: prints a menu
 
     print()
     print("MAIN MENU")
@@ -73,22 +97,20 @@ def menu() -> int:
     print("3. Plot one tour")
     print()
 
-    choice = int(input("Choice (0-3)? "))
-    while not (0 <= choice <= 3):
-        choice = int(input("Choice (0-3)? "))
-
+    choice = inputCheck("Choice (0-3)? ", 0, 3)
 
     return choice
 
 def tspPrint(tsp):
 
-    # Arguments: tsp: multi dimensional list
+    # Prints all tsp information in current list
+    # Arguments: tsp: list of tuples
     # Returns: N/A
     # Side Effects: Prints all tspData in table
 
     print()
     print("NUM  FILE NAME  EDGE TYPE  DIMENSION  COMMENT")
-    for k in range(1,len(tsp)):
+    for k in range(1, len(tsp)):
         name = tsp[k][0]
         edge = tsp[k][5]
         dimension = tsp[k][3]
@@ -98,17 +120,51 @@ def tspPrint(tsp):
 
 def tspLimit(tsp):
 
-    print("Min dimension: ")
-    print("Max dimension: ")
-    print("Limit value? ")
+    # Prints the min and max value of cities in tsp
+    # Arguments: tsp: list of tuples
+    # Returns: a new tsp list
+    # Side Effects: prompts user for limit amount
+
+    minVal, maxVal = tspMinMax(tsp)
+
+    print("Min dimension: %d" % minVal)
+    print("Max dimension: %d" % maxVal)
+
+    choice = inputCheck("Limit value? ", minVal, maxVal)
+
+    newTsp = [tsp[0]]
+
+    for i in range(1, len(tsp)):
+        if tsp[i][3] <= choice:
+            newTsp.append(tsp[i])
+
+    return newTsp
+
+def tspMinMax(tsp):
+
+    # Calculates min and max of tsp data
+    # Arguments: tsp: list of tuples
+    # Returns: min and max values
+    # Side Effects: N/A
+
+    dimensions = []
+    for i in range(1, len(tsp)):
+        dimensions.append(tsp[i][3])
+
+    minVal = min(dimensions)
+    maxVal = max(dimensions)
+
+    return minVal, maxVal
 
 def tspPlot(tsp):
 
-    # Arguments: tsp: multi dimensional list
+    # Prompts user for a list to plot
+    # Arguments: tsp: list of tuples
     # Returns: N/A
     # Side Effects: Prompts user for which trip, calls another function to plot
 
-    num = int(input("Number (EUC_2D)? "))
+    num = inputCheck("Number (EUC_2D)? ", 1, len(tsp) - 1)
+
     edge = tsp[num][5]
 
     tsp1 = tsp[num]
@@ -120,6 +176,7 @@ def tspPlot(tsp):
 
 def plotEuc2D(coord, comment, name):
 
+    # Saves plot of given coordinates
     # Arguments: 2d list of coordinates, string for comment and name
     # Returns: N/A
     # Side Effects: Creates a plot and saves in the file tspPlot.png
