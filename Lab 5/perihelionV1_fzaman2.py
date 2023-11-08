@@ -11,9 +11,10 @@
 # Electrical and Computer Engineering
 # All rights reserved.
 #
-# Student name:
-# Student CCID:
+# Student name: Farhan Zaman (100%)
+# Student CCID: fzaman2
 # Others:
+# 
 #
 # To avoid plagiarism, list the names of persons, Version 0 author(s)
 # excluded, whose code, words, ideas, or data you used. To avoid
@@ -38,13 +39,18 @@ def main():
     data = select(data, 25, ('Jan','Feb','Mar'))
     makeplot(data, 'horizons_results')
 
-def loaddata(filename: str) -> list:
-    # File Read
+def loaddata(filename):
+
+    # Reads the file and creates the data array, filtering out all the
+    # non data rows
+    # Args: name of file: str
+    # Returns: data: list of dictionaries
+    # Side Effects: Prints progress every 10000 datums
+
     file = open(filename + '.txt', 'r')
     lines = file.readlines()
     file.close()
 
-    # Creates data array
     noSOE = True
     num = 0
     data = []
@@ -67,7 +73,13 @@ def loaddata(filename: str) -> list:
 
     return data
 
-def str2dict(line: str) -> dict:
+def str2dict(line):
+
+    # Creates a dictionary based on a given string
+    # Args: line from data: string
+    # Return: dictionary: {float, str, tuple}
+    # Side Effects: N/A
+
     lineArray = line.split(",")
 
     numdate = float(lineArray[0])
@@ -76,8 +88,14 @@ def str2dict(line: str) -> dict:
 
     return { 'numdate': numdate, 'strdate': strdate, 'coord': coord }
 
-def locate(data1: list) -> list:
-    dist = [] # Vector lengths
+def locate(data1):
+
+    # Filters out data based on the dot product of the coords tuple compared to adjacent lines
+    # Args: data: list
+    # Return: filtered data: list
+    # Side Effects: N/A
+
+    dist = []
     for datum in data1:
         coord = np.array(datum['coord'])
         dot = np.dot(coord,coord)
@@ -88,8 +106,13 @@ def locate(data1: list) -> list:
             data2.append(data1[k])
     return data2
 
-def select(data: list, ystep: int, month: tuple) -> list:
-    # Filters data to multiples of ystep year and to a month 
+def select(data, ystep, month):
+
+    # Filters the data based on the year being a multiple of y step, and for certain months
+    # Args: data: list, ystep: int, month: tuple of str
+    # Return: filtered data: list
+    # Side Effects: N/A
+
     newData = []
     for datum in data:
         datumArray = datum['strdate'].split("-")
@@ -97,7 +120,13 @@ def select(data: list, ystep: int, month: tuple) -> list:
             newData.append(datum)
     return newData
 
-def makeplot(data: list, filename: str):
+def makeplot(data, filename):
+
+    # Creates the main plot for this program and saves as file
+    # Args: data: list, file to save: str
+    # Return: N/A
+    # Side Effects: Displays and saves graph
+
     (numdate,strdate,arcsec) = precess(data)
     plt.plot(numdate,arcsec,'bo')
     plt.xticks(numdate,strdate,rotation=45)
@@ -108,6 +137,12 @@ def makeplot(data: list, filename: str):
     plt.show()
 
 def precess(data):
+
+    # Does some processing for the graph data
+    # Args: data: list
+    # Return: tuple of data lists
+    # Side Effects: N/A
+
     numdate = []
     strdate = []
     arcsec = []
@@ -122,12 +157,18 @@ def precess(data):
             arcsec.append(angle)
     return (numdate,strdate,arcsec)
 
-def add2plot(numdate,actual):
+def add2plot(numdate, actual):
+
+    # Plots the line of best fit
+    # Args: date values: list, original values: list
+    # Return: N/A
+    # Side Effects: stores plot to memory
+
     r = stats.linregress(numdate,actual)
     bestfit = []
     for k in range(len(numdate)):
         bestfit.append(r[0]*numdate[k]+r[1])
     plt.plot(numdate,bestfit,'b-')
-    plt.legend(["Actual data","Best fit line"], "upper left")
+    plt.legend(["Actual data","Best fit line"], loc = "upper left")
 
 main()
