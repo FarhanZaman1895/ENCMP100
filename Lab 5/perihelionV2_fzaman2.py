@@ -32,12 +32,15 @@
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+import csv
 
 def main():
     data = loaddata('horizons_results')
     data = locate(data) # Perihelia
     data = select(data, 25, ('Jan','Feb','Mar'))
     makeplot(data, 'horizons_results')
+    savedata(data, "horizons_results")
+
 
 def loaddata(filename):
 
@@ -170,5 +173,25 @@ def add2plot(numdate, actual):
         bestfit.append(r[0]*numdate[k]+r[1])
     plt.plot(numdate,bestfit,'b-')
     plt.legend(["Actual data","Best fit line"], loc = "upper left")
+
+def savedata(data, filename):
+    filename = filename + ".csv"
+
+    with open(filename, "w") as csvfile:
+        fieldnames = ["NUMDATE", "STRDATE", "XCOORD", "YCOORD", "ZCOORD"]
+        writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+
+        writer.writeheader()
+
+        for datum in data:
+            tempData = {"NUMDATE": "%.6f" % datum["numdate"], 
+                        "STRDATE": datum["strdate"], 
+                        "XCOORD": "%.6f" % round(datum["coord"][0], 6), 
+                        "YCOORD": "%.6f" % round(datum["coord"][1], 6), 
+                        "ZCOORD": "%.6f" % round(datum["coord"][2], 6)}
+
+            writer.writerow(tempData)
+
+    csvfile.close()
 
 main()
