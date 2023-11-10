@@ -32,15 +32,15 @@
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
-import csv
+import csv, os
 
 def main():
     data = loaddata('horizons_results')
     data = locate(data) # Perihelia
-    data = select(data, 25, ('Jan','Feb','Mar'))
+    data = select(data, 50, ('Jan','Feb','Mar'))
+    data = refine(data, "horizons_results")
     makeplot(data, 'horizons_results')
     savedata(data, "horizons_results")
-
 
 def loaddata(filename):
 
@@ -93,7 +93,7 @@ def str2dict(line):
 
 def locate(data1):
 
-    # Filters out data based on the dot product of the coords tuple compared to adjacent lines
+    # Filters out data and outputs only the perihelions
     # Args: data: list
     # Return: filtered data: list
     # Side Effects: N/A
@@ -123,6 +123,21 @@ def select(data, ystep, month):
             newData.append(datum)
     return newData
 
+def refine(data, filename):
+    dirContents = []
+    validStrDates = [datum["strdate"] for datum in data]
+
+    for file in os.listdir():
+        if filename in file and ".txt" in file and len(file.split("_")) == 3:
+            isolateDate = file.replace(".txt", "").split("_")[2]
+            if isolateDate in validStrDates:
+                dirContents.append(file.replace(".txt", ""))
+
+    fileData = [locate(loaddata(i))[0] for i in dirContents]
+    fileData = sorted(fileData, key = lambda d: d["numdate"])
+
+    return fileData
+
 def makeplot(data, filename):
 
     # Creates the main plot for this program and saves as file
@@ -141,7 +156,7 @@ def makeplot(data, filename):
 
 def precess(data):
 
-    # Does some processing for the graph data
+    # Calculates the perihelions for data and outputs multiple arrays
     # Args: data: list
     # Return: tuple of data lists
     # Side Effects: N/A
@@ -174,6 +189,10 @@ def add2plot(numdate, actual):
     plt.plot(numdate,bestfit,'b-')
     plt.legend(["Actual data","Best fit line"], loc = "upper left")
 
+    slope = r[0] * 365.25 * 100
+
+    plt.title("Slope of best fit line: %.2f" % slope)
+
 def savedata(data, filename):
     filename = filename + ".csv"
 
@@ -184,7 +203,7 @@ def savedata(data, filename):
         writer.writeheader()
 
         for datum in data:
-            tempData = {"NUMDATE": "%.6f" % datum["numdate"], 
+            tempData = {"NUMDATE": "%.6f" % round(datum["numdate"], 6), 
                         "STRDATE": datum["strdate"], 
                         "XCOORD": "%.6f" % round(datum["coord"][0], 6), 
                         "YCOORD": "%.6f" % round(datum["coord"][1], 6), 
