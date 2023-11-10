@@ -191,7 +191,7 @@ def add2plot(numdate, actual):
 
     slope = r[0] * 365.25 * 100
 
-    plt.title("Slope of best fit line: %.2f" % slope)
+    plt.title("Slope of best fit line: %.2f arcsec/cent" % slope)
 
 def savedata(data, filename):
     filename = filename + ".csv"
