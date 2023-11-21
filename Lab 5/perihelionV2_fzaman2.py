@@ -37,10 +37,13 @@ import csv, os
 def main():
     data = loaddata('horizons_results')
     data = locate(data) # Perihelia
-    data = select(data, 50, ('Jan','Feb','Mar'))
+    data = select(data, 25, ('Jan','Feb','Mar'))
     data = refine(data, "horizons_results")
-    makeplot(data, 'horizons_results')
-    savedata(data, "horizons_results")
+
+    for datum in data:
+        print(datum)
+    # makeplot(data, 'horizons_results')
+    # savedata(data, "horizons_results")
 
 def loaddata(filename):
 
@@ -132,18 +135,17 @@ def refine(data, filename):
     # Side Effects: Opens files in working directory
 
     dirContents = []
-    validStrDates = [datum["strdate"] for datum in data]
+    newData = []
 
     for file in os.listdir():
         if filename in file and ".txt" in file and len(file.split("_")) == 3:
-            isolateDate = file.replace(".txt", "").split("_")[2]
-            if isolateDate in validStrDates:
-                dirContents.append(file.replace(".txt", ""))
+            dirContents.append(file.replace(".txt", "").split("_")[2])
 
-    fileData = [locate(loaddata(i))[0] for i in dirContents]
-    fileData = sorted(fileData, key = lambda d: d["numdate"])
+    for datum in data:
+        if datum["strdate"] in dirContents:
+            newData.append(locate(loaddata(filename + "_" + datum["strdate"]))[0])
 
-    return fileData
+    return newData
 
 def makeplot(data, filename):
 
@@ -216,11 +218,13 @@ def savedata(data, filename):
         writer.writeheader()
 
         for datum in data:
-            tempData = {"NUMDATE": "%.6f" % round(datum["numdate"], 6), 
-                        "STRDATE": datum["strdate"], 
-                        "XCOORD": "%.6f" % round(datum["coord"][0], 6), 
-                        "YCOORD": "%.6f" % round(datum["coord"][1], 6), 
-                        "ZCOORD": "%.6f" % round(datum["coord"][2], 6)}
+            tempData = {
+                "NUMDATE": "%.6f" % datum["numdate"],
+                "STRDATE": datum["strdate"],
+                "XCOORD": "%.6f" % datum["coord"][0],
+                "YCOORD": "%.6f" % datum["coord"][1],
+                "ZCOORD": "%.6f" % datum["coord"][2]
+            }
 
             writer.writerow(tempData)
 
