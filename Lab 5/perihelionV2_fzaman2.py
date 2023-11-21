@@ -48,7 +48,7 @@ def loaddata(filename):
     # non data rows
     # Args: name of file: str
     # Returns: data: list of dictionaries
-    # Side Effects: Prints progress every 10000 datums
+    # Side Effects: Prints progress every 10000 datums, opens the main data file
 
     file = open(filename + '.txt', 'r')
     lines = file.readlines()
@@ -124,6 +124,13 @@ def select(data, ystep, month):
     return newData
 
 def refine(data, filename):
+
+    # Locates files in working directory and looks for ones related to the valid dates,
+    # then creates a new dataset based on the new file data
+    # Args: data: list, name of file to filter: str
+    # Return: fileData: list
+    # Side Effects: Opens files in working directory
+
     dirContents = []
     validStrDates = [datum["strdate"] for datum in data]
 
@@ -194,6 +201,12 @@ def add2plot(numdate, actual):
     plt.title("Slope of best fit line: %.2f arcsec/cent" % slope)
 
 def savedata(data, filename):
+
+    # Saves the data into a csv file using the standard csv dictionary writer
+    # Args: data: list, file to save to: str
+    # Returns: N/A
+    # Side Effects: Opens a csv file, saves new data to csv file
+
     filename = filename + ".csv"
 
     with open(filename, "w") as csvfile:
