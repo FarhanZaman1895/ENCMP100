@@ -39,11 +39,8 @@ def main():
     data = locate(data) # Perihelia
     data = select(data, 25, ('Jan','Feb','Mar'))
     data = refine(data, "horizons_results")
-
-    for datum in data:
-        print(datum)
-    # makeplot(data, 'horizons_results')
-    # savedata(data, "horizons_results")
+    makeplot(data, 'horizons_results')
+    savedata(data, "horizons_results")
 
 def loaddata(filename):
 
