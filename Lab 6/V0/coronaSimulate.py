@@ -9,8 +9,8 @@
 # Electrical and Computer Engineering
 # All rights reserved.
 #
-# Student name: Farhan Zaman (100%)
-# Student CCID: fzaman2
+# Student name:
+# Student CCID:
 # Others:
 #
 # To avoid plagiarism, list the names of persons, Version 0 author(s)
@@ -52,19 +52,7 @@ def opticalSystem(im,width):
     im = idft2(IMa,IMp-Dphi)
     return (im,Dphi)
 
-def occultSquare(im, width):
-
-    squareStartX = int(len(im[0]) / 2 - width / 2)
-    squareStartY = int(len(im) / 2 - width / 2)
-
-    for i in range(squareStartY, squareStartY + width):
-        for j in range(squareStartX, squareStartX + width):
-            im[i][j] = 0
-
-    for i in range(200, 600):
-        for j in range(200, 550):
-            print(im[i][j])
-
+def occultSquare(im,_):
     return im
 
 # (IMa,IMp) = dft2(im) returns the amplitude, IMa, and phase, IMp, of the
@@ -86,12 +74,12 @@ def idft2(IMa,IMp):
     im[im > 1] = 1
     return im
 
-def gerchbergSaxton(im,maxIters,Dphi):
+def gerchbergSaxton(im,maxIters,_):
     (IMa,IMp) = dft2(im)
     images = []
     for k in range(maxIters+1):
         print("Iteration %d of %d" % (k,maxIters))
-        im = idft2(IMa,IMp + ((Dphi * k)/maxIters))
+        im = idft2(IMa,IMp)
         images.append(im)
     return images
 
@@ -100,13 +88,10 @@ def saveFrames(images):
     image = np.zeros(shape,images[0].dtype)
     maxIters = len(images)-1
     for k in range(maxIters+1):
-        image[:,:,0] = images[k]
         image[:,:,1] = images[k]
-        image[:,:,2] = images[k]
         plt.imshow(image)
-        plt.axis('off')
-        plt.title("Iteration %d of %d" % (k, maxIters))
+        plt.title(str(k))
         plt.savefig('coronagraph'+str(k)+'.png')
-        # plt.show()
+        plt.show()
 
 main()
